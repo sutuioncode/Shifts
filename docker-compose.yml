@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "3000:3000"
+      - "3030:3030"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -16,9 +16,12 @@ services:
     build:
       context: ./frontend
     ports:
-      - "8080:80"
+      - "3000:3000"
     volumes:
       - ./frontend:/app
+      - /frontend/app/node_modules
+    stdin_open: true
+    tty: true
 
   database:
     image: postgres:15
