@@ -3,25 +3,23 @@ services:
     build:
       context: ./backend
     ports:
-      - "3030:3030"
+      - "3000:3000"
     volumes:
       - ./backend:/app
       - /app/node_modules
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@database:5432/mydb"
+      DATABASE_URL: "postgresql://postgres:postgres@database:5432/shifts"
 
   frontend:
     build:
       context: ./frontend
     ports:
-      - "3000:3000"
+      - "8080:8080"
     volumes:
       - ./frontend:/app
-      - /frontend/app/node_modules
-    stdin_open: true
-    tty: true
+      - /app/node_modules
 
   database:
     image: postgres:15
@@ -30,7 +28,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydb
+      POSTGRES_DB: shifts
     volumes:
       - db_data:/var/lib/postgresql/data
 

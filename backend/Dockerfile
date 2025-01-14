@@ -1,7 +1,13 @@
-FROM node:18
+# Stage 1: Build
+FROM node:18 AS builder
+
+# Set working directory inside the container
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
-COPY . .
-EXPOSE 3000
-RUN npm run build
+
+EXPOSE 3030
+
+CMD ["npm", "run", "start:dev"]
