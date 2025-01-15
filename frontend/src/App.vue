@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import ListShifts from './components/ListShifts.vue'
-import CreateShift from './components/CreateShift.vue'
+import CreateShiftForm from './components/CreateShiftForm.vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+
+const pinia = createPinia()
+const app = createApp(this)
+app.use(pinia)
 </script>
 
 <template>
   <ListShifts  />
-  <CreateShift />
+  <CreateShiftForm />
 </template>
 
 <style scoped>
