@@ -2,12 +2,7 @@
 import ListShifts from './components/ShiftsList.vue'
 import CreateShiftForm from './components/CreateShiftForm.vue'
 import CalendarView from './components/CalendarView.vue'
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
 
-const pinia = createPinia()
-const app = createApp(this)
-app.use(pinia)
 </script>
 
 <template>
