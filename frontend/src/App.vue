@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ListShifts from './components/ShiftsList.vue'
 import CreateShiftForm from './components/CreateShiftForm.vue'
+import CalendarView from './components/CalendarView.vue'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
@@ -12,6 +13,7 @@ app.use(pinia)
 <template>
   <ListShifts  />
   <CreateShiftForm />
+  <CalendarView />
 </template>
 
 <style scoped>

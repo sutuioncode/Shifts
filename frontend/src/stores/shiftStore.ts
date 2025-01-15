@@ -30,8 +30,8 @@ export const useShiftStore = defineStore('shiftStore', {
       // Simulated API call
       this.isLoadingEmployees = true;
       this.employees = [
-        { id: 1, name: 'John Doe' },
-        { id: 2, name: 'Jane Smith' },
+        { id: 1, name: 'Marcus Aurelius' },
+        { id: 2, name: 'Cesare Borgia' },
       ];
       this.isLoadingEmployees = false;
       console.log('Fetched Emplyees')

@@ -8,13 +8,12 @@
             </option>
         </select>
         <p v-if="isLoading">Loading employees...</p>
-        <p > {{ store.isLoadingEmployees }}</p>
     </div>
 </template>
   
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue';
-import { useShiftStore, IEmployee } from '../stores/shiftStore';
+import { useShiftStore } from '../stores/shiftStore';
 
 export default defineComponent({
     name: 'EmployeeDropdown',
@@ -29,7 +28,7 @@ export default defineComponent({
         // Reactively track the employees from the store
         const employees = computed(() => store.employees);
         const isLoading = computed(() => store.isLoadingEmployees);
-        return { employees: store.employees, selectedEmployee, isLoading };
+        return { employees: employees, selectedEmployee, isLoading };
     },
 });
 </script>

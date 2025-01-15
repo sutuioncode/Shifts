@@ -9,6 +9,10 @@
     "preview": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "pinia": "^2.3.0",
     "vue": "^3.5.13"
   },
