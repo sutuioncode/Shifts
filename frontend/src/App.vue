@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ListShifts from './components/ListShifts.vue'
+import ListShifts from './components/ShiftsList.vue'
 import CreateShiftForm from './components/CreateShiftForm.vue'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
