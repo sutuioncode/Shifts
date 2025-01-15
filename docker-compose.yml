@@ -10,7 +10,7 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@database:5432/shifts"
+      DATABASE_URL: "postgresql://postgres:postgres@@localhost:5432/shifts"
 
   frontend:
     build:
@@ -23,6 +23,7 @@ services:
 
   database:
     image: postgres:15
+    container_name: database
     ports:
       - "5432:5432"
     environment:
@@ -34,3 +35,4 @@ services:
 
 volumes:
   db_data:
+    driver: local
