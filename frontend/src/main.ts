@@ -1,12 +1,11 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
-import { createPinia } from 'pinia'
-import PrimeVue from 'primevue/config';
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+import App from './App.vue';
+import './style.css';
 
-const pinia = createPinia()
+
 const app = createApp(App)
+const pinia = createPinia()
 app.use(pinia)
-app.use(PrimeVue);
 
 createApp(App).mount('#app')

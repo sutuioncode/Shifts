@@ -20,7 +20,9 @@ export const useShiftStore = defineStore('shiftStore', {
     employees: [] as Employee[],
     shifts: [] as Shift[],
     isLoadingEmployees: false as boolean,
-    isLoadingShifts: false as boolean
+    isLoadingShifts: false as boolean,
+    dialogVisible: false as boolean,
+    selectedShift: null as Shift | null,
   }),
   actions: {
     addShift(shift: Shift) {
@@ -35,6 +37,20 @@ export const useShiftStore = defineStore('shiftStore', {
       ];
       this.isLoadingEmployees = false;
       console.log('Fetched Emplyees')
+    },
+    handleEventClick(eventProps: any) {
+      this.dialogVisible = true;
+      console.log('handle click event',eventProps.extendedProps)
+      const shiftData = eventProps.extendedProps;
+      const employee = this.employees.find((e) => e.id === shiftData.employeeId);
+      this.selectedShift = {
+        ...shiftData,
+        employeeName: employee?.name || 'Unknown',
+      };
+    },
+    closeDialog() {
+      this.dialogVisible = false;
+      this.selectedShift = null;
     },
   },
 });
