@@ -2,10 +2,10 @@
 FROM node:18 AS builder
 
 # Set working directory inside the container
-WORKDIR /home/app/
+WORKDIR /app
 
 # Bundle app source
-COPY . /home/app/
+COPY . .
 RUN npm install
 
 EXPOSE 3030
