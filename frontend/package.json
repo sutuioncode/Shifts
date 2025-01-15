@@ -9,6 +9,7 @@
     "preview": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
+    "pinia": "^2.3.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {

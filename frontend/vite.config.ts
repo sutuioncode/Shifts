@@ -10,5 +10,8 @@ export default defineConfig({
     hmr: {
       host: 'localhost', // or your Docker host IP
     },
+    watch:{
+      usePolling: true
+    }
   },
 })
