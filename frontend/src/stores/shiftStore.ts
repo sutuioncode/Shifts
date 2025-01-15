@@ -19,6 +19,8 @@ export const useShiftStore = defineStore('shiftStore', {
   state: () => ({
     employees: [] as Employee[],
     shifts: [] as Shift[],
+    isLoadingEmployees: false as boolean,
+    isLoadingShifts: false as boolean
   }),
   actions: {
     addShift(shift: Shift) {
@@ -26,10 +28,13 @@ export const useShiftStore = defineStore('shiftStore', {
     },
     fetchEmployees() {
       // Simulated API call
+      this.isLoadingEmployees = true;
       this.employees = [
         { id: 1, name: 'John Doe' },
         { id: 2, name: 'Jane Smith' },
       ];
+      this.isLoadingEmployees = false;
+      console.log('Fetched Emplyees')
     },
   },
 });
