@@ -10,7 +10,7 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@@localhost:5432/shifts"
+      DATABASE_URL: "postgresql://postgres:postgres@database:5432/shifts"
 
   frontend:
     build:
