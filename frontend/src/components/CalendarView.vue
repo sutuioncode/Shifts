@@ -1,53 +1,47 @@
 <template>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar ref="calendarRef" :options="calendarOptions" />
 </template>
   
-<script lang="ts">
-import type { CalendarOptions } from '@fullcalendar/core';
+<script setup lang="ts">
+import type { Calendar, CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import FullCalendar from '@fullcalendar/vue3';
-import { computed, defineComponent } from 'vue';
+import { format } from 'date-fns';
+import { computed, useTemplateRef, watch } from 'vue';
 import { useShiftStore } from '../stores/shiftStore';
 
 
-export default defineComponent({
-    name: 'CalendarView',
-    components: { FullCalendar },
-    setup() {
-        const store = useShiftStore();
+const store = useShiftStore();
+const calendarRef = useTemplateRef<typeof FullCalendar>('calendarRef')
 
-        // Transform shifts into FullCalendar event format
-        const calendarEvents = computed(() =>
-            store.shifts.map((shift) => ({
-                id: shift.id.toString(),
-                title: `${shift.startTime} - ${shift.endTime}`,
-                start: '2025-01-15 10:00', // Assuming shift.startTime is ISO format
-                end: '2025-01-18 12:00',     // Assuming shift.endTime is ISO format
+// Transform shifts into FullCalendar event format
+const calendarEvents = computed(() =>
+    store.shifts.map((shift) => ({
+        id: shift.id.toString(),
+        interactive: false,
+        title: `${shift.employeeName}`,
+        start: `${format(shift.startDate, 'yyyy-MM-dd')} ${shift.startTime}`, // Assuming shift.startTime is ISO format
+        end: `${format(shift.endDate, 'yyyy-MM-dd')} ${shift.endTime}`, // Assuming shift.startTime is ISO format
+    }))
+);
 
-            }))
-        );
+console.log(calendarEvents.value)
+watch(store.shifts, () => {
+    (calendarRef.value?.getApi() as Calendar).refetchEvents()
+})
 
-        const calendarOptions: CalendarOptions = {
-            plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-            initialView: 'dayGridMonth',
-            events: (_, onSuccess, __) => {
+const calendarOptions: CalendarOptions = {
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: 'dayGridMonth',
+    events: (_, onSuccess, __) => {
+        onSuccess(
+            calendarEvents.value
+        )
 
-                onSuccess(
-                    calendarEvents.value
-                )
+    }
+}
 
-            }
-        }
 
-        return { calendarOptions };
-    },
-
-});
 </script>
-  
-<style>
-/* Add optional styles for better calendar appearance */
-</style>
-  
