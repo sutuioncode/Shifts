@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { weekdays } from "../utils/data";
 
 export const ShiftSchema = z.object({
     id: z.number(),
@@ -12,15 +13,7 @@ export const ShiftSchema = z.object({
     endDate: z.string().datetime({ message: "Invalid date format. Use ISO 8601." }),
     ShiftDayOfWeek: z
         .array(
-            z.enum([
-                "Sunday",
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-            ])
+            z.enum(weekdays)
         )
         .nonempty({ message: "ShiftDayOfWeek must have at least one day." }),
     repeatCicleIn: z.enum(["week", "month", "weeks", "months"], {

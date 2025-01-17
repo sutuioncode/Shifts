@@ -1,6 +1,6 @@
 import { addDays, format, startOfWeek } from 'date-fns';
 
-export const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+export const weekdays = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
 
 export function getWeekdayDate(startDate: Date, targetWeekdayName: string) {
     const targetIndex = weekdays.indexOf(targetWeekdayName);
