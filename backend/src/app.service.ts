@@ -4,12 +4,18 @@ import { Shift } from '@prisma/client';
 
 @Injectable()
 export class AppService {
-  constructor(private prisma: PrismaService) {}
+  createShift(shift: Shift) {
+    return this.prisma.shift.create({
+      data: shift
+    })
+  }
+  constructor(private prisma: PrismaService) { }
   getHello(): string {
-    return 'Hello World!' ; 
+    return 'Hello World!';
   }
 
-  listShifts(): Promise<Shift[]>{
+
+  listShifts(): Promise<Shift[]> {
     return this.prisma.shift.findMany();
   }
 }

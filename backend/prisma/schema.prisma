@@ -13,33 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Employee {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Shift[]
-}
-
 model Shift {
-  id               Int              @id @default(autoincrement())
-  startDate        DateTime
-  endDate          DateTime
-  ShiftDayOfWeek   ShiftDayOfWeek[]
-  shiftDayOfWeekId Int
-  employee         Employee         @relation(fields: [employeeId], references: [id])
-  employeeId       Int
-}
-
-model ShiftDayOfWeek {
-  id          Int       @id
-  shift       Shift     @relation(fields: [shiftId], references: [id])
-  shiftId     Int
-  dayOfWeek   DayOfWeek @relation(fields: [dayOfWeekId], references: [id])
-  dayOfWeekId Int
-}
-
-model DayOfWeek {
-  id             Int              @id
-  day            String
-  ShiftDayOfWeek ShiftDayOfWeek[]
+  id             Int      @id @default(autoincrement())
+  startTime      String
+  endTime        String
+  startDate      DateTime
+  endDate        DateTime
+  ShiftDayOfWeek String[]
+  repeatCicleIn  String
+  repeatCount    Int
+  employeeId     Int
+  employeeName   String
 }
