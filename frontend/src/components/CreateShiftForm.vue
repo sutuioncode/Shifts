@@ -2,7 +2,7 @@
   <form @submit.prevent="submitShift">
     <h2>Create Shift</h2>
 
-    <EmployeeDropdown v-model="selectedEmployee" @update:selectedOption="selectedEmployee = $event" />
+    <EmployeeDropdown @update:selectedOption="selectedEmployee = $event" />
     <div>
       <label for="startTime">Start Time:</label>
       <input type="time" id="startTime" v-model="startTime" required />
@@ -33,10 +33,6 @@
       <label style="color: yellow;" v-if="isCreatingShifts">Creating Shift ...</label>
       <label style="color: red;" v-if="isCreatingShiftsError">{{ creatingShiftsError }}</label>
     </div>
-    <label>{{ isCreatingShifts }}</label>
-    <label>{{ isCreatingShiftsError }}</label>
-    <p>Selected Value: {{ selectedEmployee }}</p>
-  </form>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +44,7 @@ import { useShiftStore, type Employee } from '../stores/shiftStore';
 import EmployeeDropdown from './EmployeeDropdown.vue';
 
 const store = useShiftStore();
-const selectedEmployee = ref<Employee | null>();
+const selectedEmployee = ref<Employee>({ id: 0, name: '' });
 const startTime = ref<string>('');
 const endTime = ref<string>('');
 const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -59,14 +55,17 @@ var isCreatingShiftsError = computed(() => store.isCreatingShiftsError)
 var isCreatingShifts = computed(() => store.isCreatingShifts)
 var creatingShiftsError = computed(() => store.creatingShiftsError)
 
+// const isCreatingShifts = store.isCreatingShifts
+
+
+
 
 const submitShift = () => {
   const date = new Date()
-  console.log("employee", selectedEmployee)
   store.addShift({
     id: 0, // ID will be added in the store
-    employeeId: selectedEmployee.value?.id ?? 0,
-    employeeName: selectedEmployee.value?.name ?? '',
+    employeeId: selectedEmployee.value.id,
+    employeeName: selectedEmployee.value.name,
     endDate: (durationType.value === 'week' ? addWeeks(date, duration.value) : addMonths(date, duration.value)).toISOString(),
     startDate: date.toISOString(),
     startTime: startTime.value,
