@@ -42,7 +42,7 @@ export const useShiftStore = defineStore('shiftStore', {
 
         if (data && success) {
           const response = await createShift(data)
-          this.listShifts(new Date(shift.startDate))
+          this.insertShift(response)
 
         } else {
           this.isCreatingShiftsError = true
@@ -57,6 +57,23 @@ export const useShiftStore = defineStore('shiftStore', {
         this.isCreatingShifts = false
       }
     },
+    insertShift(shift: Shift) {
+      for (const day of shift.ShiftDayOfWeek) {
+
+        for (let index = 0; index < shift.repeatCount; index++) {
+          const currentDay = addWeeks(shift.startDate, index)
+          const date = getWeekdayDate(currentDay, day)
+          this.shifts.push({
+            id: day,
+            date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`,
+            title: shift.employeeName
+          })
+
+        }
+
+
+      }
+    },
     async listShifts(currentDate: Date) {
       this.isLoadingShifts = true;
       const start = startOfMonth(currentDate)
@@ -64,23 +81,7 @@ export const useShiftStore = defineStore('shiftStore', {
       try {
 
         const response = await listShift(format(start, 'yyyy-MM-dd'), format(end, 'yyyy-MM-dd'))
-        for (const shift of response) {
-          for (const day of shift.ShiftDayOfWeek) {
-
-            for (let index = 0; index < shift.repeatCount; index++) {
-              const currentDay = addWeeks(shift.startDate, index )
-              const date = getWeekdayDate(currentDay, day)
-              this.shifts.push({
-                id: day,
-                date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`,
-                title: shift.employeeName
-              })
-
-            }
-
-
-          }
-        }
+        response.forEach(this.insertShift)
 
       } catch (error) {
 
