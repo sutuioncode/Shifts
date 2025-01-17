@@ -1,6 +1,7 @@
 <template>
   <form @submit.prevent="submitShift">
     <h2>Create Shift</h2>
+
     <EmployeeDropdown v-model="selectedEmployee" />
     <div>
       <label for="startTime">Start Time:</label>
@@ -27,12 +28,20 @@
         <option value="month">Months</option>
       </select>
     </div>
-    <button type="submit">Save Shift</button>
+    <div style="display: flex; flex-direction: column; padding-top: 1rem; ">
+      <button :disabled="isCreatingShifts" type="submit">Save Shift</button>
+      <label style="color: yellow;" v-if="isCreatingShifts">Creating Shift ...</label>
+      <label style="color: red;" v-if="isCreatingShiftsError">Some error happed while trying to save event try again
+        later</label>
+    </div>
   </form>
 </template>
 
 <script lang="ts">
+import addMonths from 'date-fns/addMonths';
+import addWeeks from 'date-fns/addWeeks';
 import { defineComponent, ref } from 'vue';
+import type { Shift } from '../models/shift';
 import { useShiftStore } from '../stores/shiftStore';
 import EmployeeDropdown from './EmployeeDropdown.vue';
 
@@ -48,18 +57,26 @@ export default defineComponent({
     const selectedWeekdays = ref<string[]>([]);
     const duration = ref<number>(1);
     const durationType = ref<'week' | 'month'>('week');
+    const isCreatingShiftsError = store.isCreatingShiftsError
+    const isCreatingShifts = store.isCreatingShifts
+
+
+    console.log({startTime,endTime})
+    const date = new Date()
 
     const submitShift = () => {
       store.addShift({
         id: 0, // ID will be added in the store
-        employeeId: selectedEmployee.value as number,
+        employeeId: 1,
+        employeeName: "Paulo",
+        endDate: (durationType.value === 'week' ? addWeeks(date, duration.value) : addMonths(date, duration.value)).toISOString(),
+        startDate: date.toISOString(),
         startTime: startTime.value,
         endTime: endTime.value,
-        weekdays: selectedWeekdays.value,
-        duration: duration.value,
-        durationType: durationType.value,
-      });
-      alert('Shift added successfully!');
+        ShiftDayOfWeek: selectedWeekdays.value,
+        repeatCount: duration.value,
+        repeatCicleIn: durationType.value,
+      } as Shift)
     };
 
     return {
@@ -71,6 +88,8 @@ export default defineComponent({
       duration,
       durationType,
       submitShift,
+      isCreatingShifts,
+      isCreatingShiftsError,
     };
   },
 });

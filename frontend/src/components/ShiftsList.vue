@@ -11,15 +11,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useShiftStore, Shift } from '../stores/shiftStore';
+import { useShiftStore } from '../stores/shiftStore';
+import type { Shift } from '../models/shift';
 
 export default defineComponent({
   name: 'ShiftsList',
   setup() {
     const store = useShiftStore();
-
+    console.log(store.shifts.slice())
     const formatShift = (shift: Shift) => {
-      return `Employee ${shift.employeeId}, Start: ${shift.startTime}, End: ${shift.endTime}, Days: ${shift.weekdays.join(', ')}, Duration: ${shift.duration} ${shift.durationType}`;
+      return `Employee ${shift.employeeId}, Start: ${shift.startTime}, End: ${shift.endTime}, Days: ${shift.ShiftDayOfWeek}, Duration: ${shift.repeatCount} ${shift.repeatCount}`;
     };
 
     return { shifts: store.shifts, formatShift };
