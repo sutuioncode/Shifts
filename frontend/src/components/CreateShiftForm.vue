@@ -2,7 +2,7 @@
   <form @submit.prevent="submitShift">
     <h2>Create Shift</h2>
 
-    <EmployeeDropdown v-model="selectedEmployee" />
+    <EmployeeDropdown v-model="selectedEmployee" @update:selectedOption="selectedEmployee = $event" />
     <div>
       <label for="startTime">Start Time:</label>
       <input type="time" id="startTime" v-model="startTime" required />
@@ -35,6 +35,7 @@
     </div>
     <label>{{ isCreatingShifts }}</label>
     <label>{{ isCreatingShiftsError }}</label>
+    <p>Selected Value: {{ selectedEmployee }}</p>
   </form>
 </template>
 
@@ -43,11 +44,11 @@ import { addMonths } from 'date-fns/addMonths';
 import { addWeeks } from 'date-fns/addWeeks';
 import { computed, ref } from 'vue';
 import type { Shift } from '../models/shift';
-import { useShiftStore } from '../stores/shiftStore';
+import { useShiftStore, type Employee } from '../stores/shiftStore';
 import EmployeeDropdown from './EmployeeDropdown.vue';
 
 const store = useShiftStore();
-const selectedEmployee = ref<number | ''>('');
+const selectedEmployee = ref<Employee | null>();
 const startTime = ref<string>('');
 const endTime = ref<string>('');
 const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -58,16 +59,14 @@ var isCreatingShiftsError = computed(() => store.isCreatingShiftsError)
 var isCreatingShifts = computed(() => store.isCreatingShifts)
 var creatingShiftsError = computed(() => store.creatingShiftsError)
 
-// const isCreatingShifts = store.isCreatingShifts
-
-
-const date = new Date()
 
 const submitShift = () => {
+  const date = new Date()
+  console.log("employee", selectedEmployee)
   store.addShift({
     id: 0, // ID will be added in the store
-    employeeId: 1,
-    employeeName: "Paulo",
+    employeeId: selectedEmployee.value?.id ?? 0,
+    employeeName: selectedEmployee.value?.name ?? '',
     endDate: (durationType.value === 'week' ? addWeeks(date, duration.value) : addMonths(date, duration.value)).toISOString(),
     startDate: date.toISOString(),
     startTime: startTime.value,
