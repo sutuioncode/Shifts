@@ -31,8 +31,7 @@
     <div style="display: flex; flex-direction: column; padding-top: 1rem; ">
       <button :disabled="isCreatingShifts" type="submit">Save Shift</button>
       <label style="color: yellow;" v-if="isCreatingShifts">Creating Shift ...</label>
-      <label style="color: red;" v-if="isCreatingShiftsError">Some error happed while trying to save event try again
-        later</label>
+      <label style="color: red;" v-if="isCreatingShiftsError">{{ creatingShiftsError }}</label>
     </div>
     <label>{{ isCreatingShifts }}</label>
     <label>{{ isCreatingShiftsError }}</label>
@@ -57,6 +56,7 @@ const duration = ref<number>(1);
 const durationType = ref<'week' | 'month'>('week');
 var isCreatingShiftsError = computed(() => store.isCreatingShiftsError)
 var isCreatingShifts = computed(() => store.isCreatingShifts)
+var creatingShiftsError = computed(() => store.creatingShiftsError)
 
 // const isCreatingShifts = store.isCreatingShifts
 
