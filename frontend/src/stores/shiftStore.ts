@@ -4,7 +4,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 import { CreateShiftSchema, ShiftSchema } from '../models/shift'
 import { getWeekdayDate } from '../utils/data'
 import type { Shift } from '../models/shift'
-import { addDays, endOfMonth, endOfWeek, format, isBefore, startOfMonth, startOfWeek } from 'date-fns';
+import { addDays, addWeeks, endOfMonth, endOfWeek, format, isBefore, startOfMonth, startOfWeek } from 'date-fns';
 export interface Employee {
   id: number;
   name: string;
@@ -66,19 +66,10 @@ export const useShiftStore = defineStore('shiftStore', {
         const response = await listShift(format(start, 'yyyy-MM-dd'), format(end, 'yyyy-MM-dd'))
         for (const shift of response) {
           for (const day of shift.ShiftDayOfWeek) {
-            const date = getWeekdayDate(start, day)
-            const week = startOfWeek(date)
 
-            console.log({ date, week, start })
-            if (isBefore(week, date)) {
-              const newDate = addDays(date, 7)
-              this.shifts.push({
-                id: day,
-                date: `${format(newDate, 'yyyy-MM-dd')} ${shift.startTime}`,
-                title: shift.employeeName
-              })
-            } else {
-
+            for (let index = 0; index < shift.repeatCount; index++) {
+              const currentDay = addWeeks(shift.startDate, index )
+              const date = getWeekdayDate(currentDay, day)
               this.shifts.push({
                 id: day,
                 date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`,
@@ -86,6 +77,8 @@ export const useShiftStore = defineStore('shiftStore', {
               })
 
             }
+
+
           }
         }
 
