@@ -34,63 +34,50 @@
       <label style="color: red;" v-if="isCreatingShiftsError">Some error happed while trying to save event try again
         later</label>
     </div>
+    <label>{{ isCreatingShifts }}</label>
+    <label>{{ isCreatingShiftsError }}</label>
   </form>
 </template>
 
-<script lang="ts">
-import addMonths from 'date-fns/addMonths';
-import addWeeks from 'date-fns/addWeeks';
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { addMonths } from 'date-fns/addMonths';
+import { addWeeks } from 'date-fns/addWeeks';
+import { computed, ref } from 'vue';
 import type { Shift } from '../models/shift';
 import { useShiftStore } from '../stores/shiftStore';
 import EmployeeDropdown from './EmployeeDropdown.vue';
 
-export default defineComponent({
-  name: 'CreateShiftForm',
-  components: { EmployeeDropdown },
-  setup() {
-    const store = useShiftStore();
-    const selectedEmployee = ref<number | ''>('');
-    const startTime = ref<string>('');
-    const endTime = ref<string>('');
-    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const selectedWeekdays = ref<string[]>([]);
-    const duration = ref<number>(1);
-    const durationType = ref<'week' | 'month'>('week');
-    const isCreatingShiftsError = store.isCreatingShiftsError
-    const isCreatingShifts = store.isCreatingShifts
+const store = useShiftStore();
+const selectedEmployee = ref<number | ''>('');
+const startTime = ref<string>('');
+const endTime = ref<string>('');
+const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const selectedWeekdays = ref<string[]>([]);
+const duration = ref<number>(1);
+const durationType = ref<'week' | 'month'>('week');
+var isCreatingShiftsError = computed(() => store.isCreatingShiftsError)
+var isCreatingShifts = computed(() => store.isCreatingShifts)
+
+// const isCreatingShifts = store.isCreatingShifts
 
 
-    console.log({startTime,endTime})
-    const date = new Date()
+const date = new Date()
 
-    const submitShift = () => {
-      store.addShift({
-        id: 0, // ID will be added in the store
-        employeeId: 1,
-        employeeName: "Paulo",
-        endDate: (durationType.value === 'week' ? addWeeks(date, duration.value) : addMonths(date, duration.value)).toISOString(),
-        startDate: date.toISOString(),
-        startTime: startTime.value,
-        endTime: endTime.value,
-        ShiftDayOfWeek: selectedWeekdays.value,
-        repeatCount: duration.value,
-        repeatCicleIn: durationType.value,
-      } as Shift)
-    };
+const submitShift = () => {
+  store.addShift({
+    id: 0, // ID will be added in the store
+    employeeId: 1,
+    employeeName: "Paulo",
+    endDate: (durationType.value === 'week' ? addWeeks(date, duration.value) : addMonths(date, duration.value)).toISOString(),
+    startDate: date.toISOString(),
+    startTime: startTime.value,
+    endTime: endTime.value,
+    ShiftDayOfWeek: selectedWeekdays.value,
+    repeatCount: duration.value,
+    repeatCicleIn: durationType.value,
+  } as Shift)
+};
 
-    return {
-      selectedEmployee,
-      startTime,
-      endTime,
-      weekdays,
-      selectedWeekdays,
-      duration,
-      durationType,
-      submitShift,
-      isCreatingShifts,
-      isCreatingShiftsError,
-    };
-  },
-});
+
+
 </script>

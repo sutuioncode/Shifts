@@ -24,8 +24,11 @@ export const useShiftStore = defineStore('shiftStore', {
   actions: {
     async addShift(shift: Shift) {
       try {
-        this.isCreatingShifts = true
         this.creatingShiftsError = null
+        this.isCreatingShiftsError = false
+        this.isCreatingShifts = true
+
+
         const { data, error, success } = CreateShiftSchema.safeParse(shift)
 
         if (data && success) {
@@ -37,10 +40,9 @@ export const useShiftStore = defineStore('shiftStore', {
           this.creatingShiftsError = `Ocoreu um erro ao validar o formulario: \n ${error.message}`
         }
 
-        this.isCreatingShifts = false
       } catch {
-        this.creatingShiftsError = "Ocoreu um error ao salvar o component"
         this.isCreatingShiftsError = true
+        this.creatingShiftsError = "Ocoreu um error ao salvar o component"
       } finally {
         this.isCreatingShifts = false
       }
