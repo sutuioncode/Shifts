@@ -1,0 +1,16 @@
+meta {
+  name: List-ShiftsBy-Date
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:3000/shifts/list-shifts-by-date?start=2025-01-01&end=2025-08-20
+  body: none
+  auth: none
+}
+
+params:query {
+  start: 2025-01-01
+  end: 2025-08-20
+}

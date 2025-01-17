@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Shift } from '@prisma/client';
+import { ListShiftsByDate } from './models/requests/shifts'
 
 @Controller('shifts')
 export class AppController {
@@ -19,5 +20,10 @@ export class AppController {
   @Get('list-shifts')
   listShifts(): Promise<Shift[]> {
     return this.appService.listShifts()
+  }
+
+  @Get('list-shifts-by-date')
+  listShiftsByDaye(@Query() query: ListShiftsByDate): Promise<Shift[]> {
+    return this.appService.listShiftsByDate(new Date(query.start), new Date(query.end))
   }
 }
