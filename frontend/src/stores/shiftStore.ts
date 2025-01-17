@@ -1,17 +1,26 @@
 import { createShift } from '../services/api/create-shifts';
+import { listShift } from '../services/api/list-shifts';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import { CreateShiftSchema, ShiftSchema } from '../models/shift'
+import { getWeekdayDate } from '../utils/data'
 import type { Shift } from '../models/shift'
+import { endOfMonth, endOfWeek, format, startOfMonth, startOfWeek } from 'date-fns';
 export interface Employee {
   id: number;
   name: string;
+}
+
+export interface Event {
+  title: string
+  date: string
+  id: string
 }
 
 
 export const useShiftStore = defineStore('shiftStore', {
   state: () => ({
     employees: [] as Employee[],
-    shifts: [] as Shift[],
+    shifts: [] as Event[],
     isLoadingEmployees: false as boolean,
     isLoadingShifts: false as boolean,
     loadingShiftsError: null as (string | null),
@@ -33,19 +42,47 @@ export const useShiftStore = defineStore('shiftStore', {
 
         if (data && success) {
           const response = await createShift(data)
-          this.shifts.push((response));
+          // this.shifts.push((response));
 
         } else {
           this.isCreatingShiftsError = true
           this.creatingShiftsError = `Ocoreu um erro ao validar o formulario: \n ${error.message}`
         }
 
-      } catch (error){
+      } catch (error) {
         this.isCreatingShiftsError = true
         this.creatingShiftsError = "Ocoreu um error ao salvar o component"
         console.log(error)
       } finally {
         this.isCreatingShifts = false
+      }
+    },
+    async listShifts(currentDate: Date) {
+      this.isLoadingShifts = true;
+      const start = startOfMonth(currentDate)
+      const end = endOfMonth(currentDate)
+      try {
+
+        const response = await listShift(format(start, 'yyyy-MM-dd'), format(end, 'yyyy-MM-dd'))
+        for (const shift of response) {
+          for (const day of shift.ShiftDayOfWeek) {
+            const date = getWeekdayDate(start, day)
+            console.log(day, date, shift)
+
+            this.shifts.push({
+              id: day,
+              date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`, 
+              title: shift.employeeName
+            })
+          }
+        }
+
+      } catch (error) {
+        this.isLoadingShiftsError = false
+        console.log(error)
+
+      } finally {
+        this.isLoadingShifts = false
       }
     },
     fetchEmployees() {

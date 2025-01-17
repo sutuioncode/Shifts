@@ -23,14 +23,14 @@ export const ShiftSchema = z.object({
             ])
         )
         .nonempty({ message: "ShiftDayOfWeek must have at least one day." }),
-    repeatCicleIn: z.enum(["week", "month"], {
+    repeatCicleIn: z.enum(["week", "month", "weeks", "months"], {
         message: "repeatCicleIn must be either 'weeks' or 'months'.",
     }),
     repeatCount: z.number().int().positive({ message: "repeatCount must be a positive integer." }),
     employeeId: z.number().int().positive({ message: "employeeId must be a positive integer." }),
     employeeName: z.string().min(1, { message: "employeeName cannot be empty." }),
 });
-
+export const ShiftList = z.array(ShiftSchema)
 export const CreateShiftSchema = ShiftSchema.omit({ id: true })
 export type Shift = z.infer<typeof ShiftSchema>
 export type CreateShift = z.infer<typeof CreateShiftSchema>
