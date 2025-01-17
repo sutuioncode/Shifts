@@ -4,7 +4,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 import { CreateShiftSchema, ShiftSchema } from '../models/shift'
 import { getWeekdayDate } from '../utils/data'
 import type { Shift } from '../models/shift'
-import { endOfMonth, endOfWeek, format, startOfMonth, startOfWeek } from 'date-fns';
+import { addDays, endOfMonth, endOfWeek, format, isBefore, startOfMonth, startOfWeek } from 'date-fns';
 export interface Employee {
   id: number;
   name: string;
@@ -42,7 +42,7 @@ export const useShiftStore = defineStore('shiftStore', {
 
         if (data && success) {
           const response = await createShift(data)
-          // this.shifts.push((response));
+          this.listShifts(new Date(shift.startDate))
 
         } else {
           this.isCreatingShiftsError = true
@@ -67,18 +67,30 @@ export const useShiftStore = defineStore('shiftStore', {
         for (const shift of response) {
           for (const day of shift.ShiftDayOfWeek) {
             const date = getWeekdayDate(start, day)
-            console.log(day, date, shift)
+            const week = startOfWeek(date)
 
-            this.shifts.push({
-              id: day,
-              date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`, 
-              title: shift.employeeName
-            })
+            console.log({ date, week, start })
+            if (isBefore(week, date)) {
+              const newDate = addDays(date, 7)
+              this.shifts.push({
+                id: day,
+                date: `${format(newDate, 'yyyy-MM-dd')} ${shift.startTime}`,
+                title: shift.employeeName
+              })
+            } else {
+
+              this.shifts.push({
+                id: day,
+                date: `${format(date, 'yyyy-MM-dd')} ${shift.startTime}`,
+                title: shift.employeeName
+              })
+
+            }
           }
         }
 
       } catch (error) {
-        this.isLoadingShiftsError = false
+
         console.log(error)
 
       } finally {

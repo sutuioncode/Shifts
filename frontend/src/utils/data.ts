@@ -13,7 +13,3 @@ export function getWeekdayDate(startDate: Date, targetWeekdayName: string) {
     const targetDate = addDays(weekStartDate, targetIndex); // Get the target weekday
     return targetDate
 }
-
-const weekStart = '2025-01-13'; // Given start of the week
-const targetWeekday = "Thursday"; // Desired weekday
-
