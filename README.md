@@ -32,11 +32,11 @@ Make sure you have the following installed:
    cd shifts
    ```
 2. **Configure environment variables**
-   - Create a `.env` file inside the `rootdir/backend` folder and set up your database connection:
+   - Create a `.env` file inside the `shifts/backend` folder and set up your database connection:
      ```env
      DATABASE_URL=postgresql://postgres:postgres@database:5432/shifts
      ```
-   - Create a `.env` file inside the `rootdir/frontend` folder:
+   - Create a `.env` file inside the `shifts/frontend` folder:
      ```env
      VITE_API_URL=http://localhost:3000
      ```
