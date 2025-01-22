@@ -41,15 +41,13 @@ Make sure you have the following installed:
      VITE_API_URL=http://localhost:3000
      ```
 3. **Run the application**:
+   - Build the application
    ```sh
-   docker compose up
+   docker compose up -- build
    ```
+   - Start the application at `http:\\localhost:8080`
 
 ## Deployment
-For production deployment, update environment variables and run:
-```sh
-docker compose up -d
-```
-
+TBA
 ## License
 MIT License
